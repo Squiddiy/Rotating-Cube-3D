@@ -15,7 +15,7 @@ public class Cube {
 	public static int width = 40, height = 14;
 
 	public static double[] zBuffer = new double[width * height];
-	public static byte[] buffer = new byte[width * height];
+	public static byte[] charBuffer = new byte[width * height];
 
 	public static byte backgroundAsciiCode = ' ';
 	public static int distanceFromCam = 100;
@@ -49,7 +49,7 @@ public class Cube {
 		return cubeZ * Math.cos(a) * Math.cos(b) - cubeY * Math.sin(a) * Math.cos(b) + cubeX * Math.sin(b);
 	}
 
-	public static void calculateForSurface(float cubeX, float cubeY, float cubeZ, char WhatToDraw) {
+	public static void calculateForSurface(float cubeX, float cubeY, float cubeZ, char charToDraw) {
 		x = CalculateX(cubeX, cubeY, cubeZ);
 		y = CalculateY(cubeX, cubeY, cubeZ);
 		z = CalculateZ(cubeX, cubeY, cubeZ) + distanceFromCam;
@@ -64,7 +64,7 @@ public class Cube {
 		if (arrayIndex >= 0 && arrayIndex < width * height) {
 			if (zFraction > zBuffer[arrayIndex]) {
 				zBuffer[arrayIndex] = zFraction;
-				buffer[arrayIndex] = (byte) WhatToDraw;
+				charBuffer[arrayIndex] = (byte) charToDraw;
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class Cube {
 	public static void main(String[] args) {
 		while (timesToLoop < 100) {
 					
-			Arrays.fill(buffer, 0, width * height, backgroundAsciiCode);
+			Arrays.fill(charBuffer, 0, width * height, backgroundAsciiCode);
 			Arrays.fill(zBuffer, 0, width * height, 0);
 			// horizontalOffset = -2 * cubeWidth;
 			// first cube
@@ -89,7 +89,7 @@ public class Cube {
 
 			for (int k = 0; k < width * height; k++) {
 				//Förvandlar int till en char med hjälp av bytes
-				System.out.print((char) Byte.toUnsignedInt((byte) ((int) (k % width != 0 ? buffer[k] : 10))));
+				System.out.print((char) Byte.toUnsignedInt((byte) ((int) (k % width != 0 ? charBuffer[k] : 10))));
 			}
 
 			//Hur kuben roterar
