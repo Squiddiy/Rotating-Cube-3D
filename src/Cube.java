@@ -9,14 +9,15 @@ public class Cube {
 	public static float a, b, c;
 	public static double x, y, z;
 
-
+	public static float WaitTime = 0.5f;
+	
 	public static float cubeWidth = 10;
 	public static int width = 40, height = 14;
 
-	public static double[] zBuffer = new double[40 * 22];
-	public static byte[] buffer = new byte[40 * 22];
+	public static double[] zBuffer = new double[width * height];
+	public static byte[] buffer = new byte[width * height];
 
-	public static int backgroundAsciiCode = ' ';
+	public static byte backgroundAsciiCode = ' ';
 	public static int distanceFromCam = 100;
 
 	public static float horizontalOffset;
@@ -48,7 +49,7 @@ public class Cube {
 		return cubeZ * Math.cos(a) * Math.cos(b) - cubeY * Math.sin(a) * Math.cos(b) + cubeX * Math.sin(b);
 	}
 
-	public static void calculateForSurface(float cubeX, float cubeY, float cubeZ, int ch) {
+	public static void calculateForSurface(float cubeX, float cubeY, float cubeZ, char WhatToDraw) {
 		x = CalculateX(cubeX, cubeY, cubeZ);
 		y = CalculateY(cubeX, cubeY, cubeZ);
 		z = CalculateZ(cubeX, cubeY, cubeZ) + distanceFromCam;
@@ -63,7 +64,7 @@ public class Cube {
 		if (arrayIndex >= 0 && arrayIndex < width * height) {
 			if (zFraction > zBuffer[arrayIndex]) {
 				zBuffer[arrayIndex] = zFraction;
-				buffer[arrayIndex] = (byte) ch;
+				buffer[arrayIndex] = (byte) WhatToDraw;
 			}
 		}
 	}
@@ -71,8 +72,8 @@ public class Cube {
 	public static void main(String[] args) {
 		while (timesToLoop < 100) {
 					
-			Arrays.fill(buffer, 0, width * height, (byte) backgroundAsciiCode);
-			Arrays.fill(zBuffer, 0, width * height, (byte) 0);
+			Arrays.fill(buffer, 0, width * height, backgroundAsciiCode);
+			Arrays.fill(zBuffer, 0, width * height, 0);
 			// horizontalOffset = -2 * cubeWidth;
 			// first cube
 			for (float cubeX = -cubeWidth; cubeX < cubeWidth; cubeX += incrementSpeed) {
@@ -98,7 +99,7 @@ public class Cube {
 
 			//Pausar så man kan se nåt
 			try {
-				TimeUnit.SECONDS.sleep((long) 0.3f);
+				TimeUnit.SECONDS.sleep((long) WaitTime);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
